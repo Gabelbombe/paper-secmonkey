@@ -405,4 +405,15 @@ AWS S3 has an ACL system that makes use of Canonical IDs. These IDs are not easy
 
 
 ### Create the first user:
+
 Users can be created on the command line or by registering in the Web UI:
+
+```bash
+monkey create_user "you@youremail.com" "Admin"
+> Password:
+> Confirm Password:
+
+`create_user` takes two parameters:
+
+email address
+role (One of [`View`, `Comment`, `Justify`, `Admin`])
