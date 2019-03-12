@@ -417,3 +417,51 @@ monkey create_user "you@youremail.com" "Admin"
 
 email address
 role (One of [`View`, `Comment`, `Justify`, `Admin`])
+```
+
+### Create an SSL Certificate
+
+Now we will use a self-signed SSL certificate. In production, you will want to use a certificate that has been signed by a **trusted certificate authority**.:
+
+```bash
+cd ~
+```
+
+There are some great instructions for generating a certificate on the Ubuntu website:
+
+[Ubuntu - Create a Self Signed SSL Certificate](https://help.ubuntu.com/14.04/serverguide/certificates-and-security.html)
+
+Or to just generate a _Never use cert_
+
+```bash
+openssl req  -nodes -new -x509  -keyout server.key -out server.crt
+```
+
+Then, the  last commands you need to run from that tutorial are in the "Installing the Certificate" section:
+
+```bash
+sudo cp server.crt /etc/ssl/certs
+sudo cp server.key /etc/ssl/private
+```
+
+Once you have finished the instructions at the link above, and these two files are in your `/etc/ssl/certs` and `/etc/ssl/private`, you are ready to move on.
+
+
+### Setup Nginx:
+
+Security Monkey uses `gunicorn` to serve up content on its internal `127.0.0.1` address. For better performance, and to offload the work of serving static files, we wrap gunicorn with nginx. Nginx listens on `0.0.0.0` and proxies some connections to gunicorn for processing and serves up static files quickly.
+
+**securitymonkey.conf**
+
+Copy the config file into place:
+
+```bash
+sudo cp /usr/local/src/security_monkey/nginx/security_monkey.conf /etc/nginx/sites-available/security_monkey.conf
+sudo ln -s /etc/nginx/sites-available/security_monkey.conf /etc/nginx/sites-enabled/security_monkey.conf
+sudo rm /etc/nginx/sites-enabled/default
+sudo service nginx restart
+```
+
+### Start the API server
+
+Manually start Security Monkey with monkey `run_api_server`. Setting up autostart is explained later in this documentation.
