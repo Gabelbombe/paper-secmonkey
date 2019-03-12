@@ -204,6 +204,11 @@ Your `SecurityMonkey` role should now look something like this:
 
 ![](assets/summary.png)
 
+Adding more accounts
+To have your instance of security monkey monitor additional accounts, you must add a SecurityMonkey role in the new account. Follow the instructions above to create the new SecurityMonkey role. The Trust Relationship policy should have the account ID of the account where the security monkey instance is running.
+
+> **NOTE:** Additional `SecurityMonkeyInstanceProfile` roles are not required. You only need to create a new `SecurityMonkey` role.
+> **NOTE:** You will also need to add the new account in the Web UI, and restart the scheduler. 
 
 ### Creating an EC2 Instance
 
