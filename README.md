@@ -274,7 +274,7 @@ sudo apt-get update
 sudo apt-get -y install python-pip python-dev python-psycopg2 postgresql postgresql-contrib libpq-dev nginx supervisor git swig python-m2crypto
 ```
 
-### Setup Postgres
+### Setup a Local Postgres
 
 For production, you will want to use an AWS RDS Postgres database. For this guide, we will setup a database on the instance that was just launched.
 
@@ -301,31 +301,58 @@ sudo -u postgres psql
 Next we'll clone and install the package:
 
 ```bash
+sudo apt-get install -y virtualenv
+
 cd /usr/local/src
-sudo git clone --depth 1 --branch master https://github.com/Netflix/security_monkey.git
+sudo git clone --depth 1 --branch develop https://github.com/Netflix/security_monkey.git
+sudo chown -R `whoami`:www-data /usr/local/src/security_monkey
 
 cd security_monkey
-sudo python setup.py install
+export LC_ALL="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+virtualenv venv
+
+source venv/bin/activate
+pip install --upgrade setuptools
+pip install --upgrade pip
+pip install --upgrade urllib3[secure]   # to prevent InsecurePlatformWarning
+python setup.py develop
 ```
 
-And then compile the web-app from the Dart code:
+> **ULTRA SUPER IMPORTANT SPECIAL NOTE PLEASE READ THIS**
+
+In the commands above, a [Python virtual environment](http://python-guide-pt-br.readthedocs.io/en/latest/dev/virtualenvs/) is created. ALL Security Monkey commands from this point forward **MUST** be done from within the virtual environment. If following the instructions above, you can get back into the virtual environment by running the following commands:
+
+```bash
+cd /usr/local/src/security_monkey
+source venv/bin/activate
+```
+
+
+### Compile (or Download) the Web UI
+
+If you're using the stable (master) branch, you have the option of downloading the web UI instead of compiling it. Visit the [latest release](https://github.com/Netflix/security_monkey/releases/latest) and download static.tar.gz.
+
+If you're using the bleeding edge (develop) branch, you will need to compile the Web UI by following these instructions:
 
 ```bash
 # Get the Google Linux package signing key.
-curl https://dl-ssl.google.com/linux/linux_signing_key.pub |sudo apt-key add -
+curl https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 
 # Set up the location of the stable repository.
 cd ~
 curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > dart_stable.list
 sudo mv dart_stable.list /etc/apt/sources.list.d/dart_stable.list
 sudo apt-get update
-sudo apt-get install -y dart
+sudo apt-get install -y dart=1.24.*
 
 # Build the Web UI
 cd /usr/local/src/security_monkey/dart
-sudo /usr/lib/dart/bin/pub build
+/usr/lib/dart/bin/pub get
+/usr/lib/dart/bin/pub build
 
 # Copy the compiled Web UI to the appropriate destination
-sudo /bin/mkdir -p /usr/local/src/security_monkey/security_monkey/static/
-sudo /bin/cp -R /usr/local/src/security_monkey/dart/build/web/* /usr/local/src/security_monkey/security_monkey/static/
+sudo mkdir -p /usr/local/src/security_monkey/static/
+sudo /bin/cp -R /usr/local/src/security_monkey/dart/build/web/* /usr/local/src/security_monkey/static/
+sudo chgrp -R www-data /usr/local/src/security_monkey
 ```
