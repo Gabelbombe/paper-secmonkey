@@ -212,3 +212,9 @@ For creating an EC2 instance navigate to your [EC2 console](https://console.aws.
 Select an AMI or Amazon Machine Instance in the next page. **Do not click on Review and Launch** as we have to add our Instance that we had previously created. Navigate to the **Configure Instance** tab and under **IAM Role**, select `SecurityMonkeyInstanceProfile`.
 
 ![](assets/configure.png)
+
+You will be asked to create a key before launching the instance. This **key** will be required to connect to the instance and is generated only **ONCE**. Hence, it needs to be kept properly and further, you will be asked to change the permissions of the key file so that the access can be restricted. After that ssh can be used as shown below to connect to your EC2 instance.
+
+![](assets/keypair.png)
+
+You may now launch the new instance. Please take note of the **Public DNS** entry. We will need that later when configuring security monkey.
