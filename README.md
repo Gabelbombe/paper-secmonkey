@@ -202,4 +202,4 @@ After completing the above successfully, go to your newly created Role `Security
 
 Your `SecurityMonkey` role should now look something like this:
 
-![](assets/summary)
+![](assets/summary.png)
