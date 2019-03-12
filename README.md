@@ -421,6 +421,25 @@ email address
 role (One of [`View`, `Comment`, `Justify`, `Admin`])
 ```
 
+
+### Setting up Supervisor
+Supervisor will auto-start security monkey and will auto-restart security monkey if it crashes.
+
+Copy supervisor config:
+
+```bash
+sudo chgrp -R www-data /var/log/security_monkey
+sudo cp /usr/local/src/security_monkey/supervisor/security_monkey.conf /etc/supervisor/conf.d/security_monkey.conf
+sudo service supervisor restart
+sudo supervisorctl status
+```
+
+Supervisor will attempt to start two python jobs and make sure they are running. The first job, securitymonkey, is gunicorn, which it launches by calling `manage.py run_api_server`.
+
+The second job supervisor runs is the scheduler, which polls for changes.
+
+You can track progress by tailing `/var/log/security_monkey/securitymonkey.log`.
+
 ### Create an SSL Certificate
 
 Now we will use a self-signed SSL certificate. In production, you will want to use a certificate that has been signed by a **trusted certificate authority**.:
