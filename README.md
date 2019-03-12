@@ -466,4 +466,6 @@ sudo service nginx restart
 
 ### Start the API server
 
-Manually start Security Monkey with `monkey run_api_server`. Setting up autostart is explained later in this documentation.
+Manually start Security Monkey with `monkey run_api_server`, and if God loves you, your should see this:
+
+![](assets.monkey_magic.png)
