@@ -201,3 +201,5 @@ After completing the above successfully, go to your newly created Role `Security
 > **NOTE:** You will have to add your own Account ID in the above code.
 
 Your `SecurityMonkey` role should now look something like this:
+
+![](assets/summary)
