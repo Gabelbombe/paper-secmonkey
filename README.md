@@ -18,9 +18,10 @@ Security Monkey has been an invaluable tool that you will honestly end up using 
 
 Here are some common scenarios where Security Monkey can be of help, especially in a multi-account(AWS) environment:
 
-> Security groups are virtual firewalls. Every AWS instance needs to be launched with at least once security group
+## The AWS Services, a bulleted list
 
-Security Monkey monitors security groups across multiple AWS accounts as well as:
+
+### Security groups
 
 - Generates an Audit report of all the issues ( Ex : Security groups which are wide open to the internet or ingress from 0.0.0.0/0, etc.)
 - Creates an email alert when security group changes are done, which can come in handy when you have a PCI/SOX/HIPPA compliance related environment.
@@ -31,3 +32,30 @@ Security Monkey monitors security groups across multiple AWS accounts as well as
 - Keeps track of your PCI/SOX/HIPPA compliant environment for changes, where you can set an alert to email when a change is performed to a security group or send it to your internal auditor/change control management team directly.
 - Alerts when a new Security Group is created.
 - Helps locate a security group which no longer exists in AWS or was deleted knowing or unknowingly.
+
+
+### Amazon S3
+
+- Security Monkey acts as the source control for your S3 buckets policies, ACL, lifecycle rules.
+- Generates an audit report of all the current issues ( Ex : AWS S3 buckets which are accessible to everyone shared across unknown AWS accounts and have conditional statements )
+- Creates an e-mail alert when a S3 bucket is added or deleted.
+- AWS S3 resource policies are used to grant fine grain access controls for S3 buckets and objects. All the ACL's and policies are stored in security monkey which triggers alerts when changes are done. Comes handy when you have sensitive S3 buckets and you want to monitor for changes.
+- Tracks S3 buckets for bucket-level encryption.
+- Tracks versioning of buckets.
+- Tracks the lifecycle object of an S3 bucket. Lifecycle rules enable you to automatically archive/delete S3 objects based on predefined rule sets.
+- Monitors S3 ACLs and bucket policies since last check and alerts when buckets are publicly accessible.
+
+Here is a good read on 100s AWS S3 buckets [left open exposing private data](https://www.helpnetsecurity.com/2013/03/27/thousands-of-amazon-s3-buckets-left-open-exposing-private-data/).
+
+
+### Identity and Access Management
+
+- Generates a report of all active IAM users with active access keys.
+- Lists all active IAM active keys which are not rotated in the last 90 days.
+- Lists all inactive access keys which can be used to clean up.
+- Lists all the active keys which were not used in the last 90 days.
+- Lists IAM User who have AWS Console access, however with no MFA enabled.
+- Alerts when an IAM Role has full Admin privileges.
+- Finally Security Monkey also acts as a source control for all your IAM policies attached to the users/roles.
+
+A good read on the [AWS Console breach](http://arstechnica.com/security/2014/06/aws-console-breach-leads-to-demise-of-service-with-proven-backup-plan).
