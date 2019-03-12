@@ -203,3 +203,10 @@ After completing the above successfully, go to your newly created Role `Security
 Your `SecurityMonkey` role should now look something like this:
 
 ![](assets/summary.png)
+
+
+### Creating an EC2 Instance
+
+For creating an EC2 instance navigate to your [EC2 console](https://console.aws.amazon.com/ec2/) and select **Launch Instance**.
+
+Select an AMI or Amazon Machine Instance in the next page. **Do not click on Review and Launch** as we have to add our Instance that we had previously created. Navigate to the **Configure Instance** tab and under **IAM Role**, select `SecurityMonkeyInstanceProfile`.
