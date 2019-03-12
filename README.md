@@ -1,4 +1,6 @@
-# Automated Monitoring for Security Misconfigurations with Security Monkey
+# In a House of of A Thousand Chimps
+
+_**Automated Monitoring for Security Misconfigurations with Security Monkey**_
 
 ![Netlfix Ape Guy](assets/security_monkey.jpg)
 
@@ -464,4 +466,4 @@ sudo service nginx restart
 
 ### Start the API server
 
-Manually start Security Monkey with monkey `run_api_server`. Setting up autostart is explained later in this documentation.
+Manually start Security Monkey with `monkey run_api_server`. Setting up autostart is explained later in this documentation.
