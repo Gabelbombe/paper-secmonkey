@@ -218,3 +218,54 @@ You will be asked to create a key before launching the instance. This **key** wi
 ![](assets/keypair.png)
 
 You may now launch the new instance. Please take note of the **Public DNS** entry. We will need that later when configuring security monkey.
+
+
+### Installing Prerequisites
+
+Now we have a fresh install of Ubuntu as an EC2 instance. Let's add our hostname to our `/etc/hosts`
+
+```bash
+sudo echo >> "127.0.0.1 $(hostname)" /etc/hosts
+```
+
+Create and seeed our logging folders:
+
+```bash
+sudo mkdir /var/log/security_monkey
+sudo chown www-data /var/log/security_monkey
+sudo mkdir /var/www
+sudo chown www-data /var/www
+sudo touch /var/log/security_monkey/security_monkey.error.log
+sudo touch /var/log/security_monkey/security_monkey.access.log
+sudo touch /var/log/security_monkey/security_monkey-deploy.log
+sudo chown www-data /var/log/security_monkey/security_monkey-deploy.log
+```
+
+Let's install the tools we need for Security Monkey:
+
+```bash
+sudo apt-get -y update
+sudo apt-get -y install python-pip python-dev python-psycopg2 postgresql postgresql-contrib libpq-dev nginx supervisor git swig python-m2crypto
+```
+
+### Setup Postgres
+
+For production, you will want to use an AWS RDS Postgres database. For this guide, we will setup a database on the instance that was just launched.
+
+First, set a password for the postgres user. For this guide, we will use **securitymonkeypassword**:
+
+```bash
+sudo -u postgres psql postgres
+
+# \password postgres
+Enter new password: securitymonkeypassword
+Enter it again: securitymonkeypassword
+```
+
+Type `CTRL-D` to exit PSQL once you have changed the password.
+
+Next, we will create our a new database:
+
+```bash
+sudo -u postgres createdb secmonkey
+```
