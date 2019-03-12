@@ -488,3 +488,10 @@ sudo service nginx restart
 Manually start Security Monkey with `monkey run_api_server`, and if God loves you, your should see this:
 
 ![](assets/monkey_magic.png)
+
+
+### Loading Data into Security Monkey
+
+To initially get data into Security Monkey, you can run the `monkey find_changes` command. This will go through all your configured accounts in Security Monkey, fetch details about the accounts, store them into the database, and then audit the items for any issues.
+
+The find_changes command can be further scoped to account and technology with the `-a` account and `-m` technology parameters.
