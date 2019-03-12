@@ -1,4 +1,4 @@
-# In a House of of A Thousand Chimps
+# Stuck in the house of A Thousand Chimps
 
 _**Automated Monitoring for Security Misconfigurations with Security Monkey**_
 
