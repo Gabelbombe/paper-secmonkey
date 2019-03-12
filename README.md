@@ -205,10 +205,11 @@ Your `SecurityMonkey` role should now look something like this:
 ![](assets/summary.png)
 
 Adding more accounts
-To have your instance of security monkey monitor additional accounts, you must add a SecurityMonkey role in the new account. Follow the instructions above to create the new SecurityMonkey role. The Trust Relationship policy should have the account ID of the account where the security monkey instance is running.
+To have your instance of security monkey monitor additional accounts, you must add a `SecurityMonkey` role in the new account. Follow the instructions above to create the new SecurityMonkey role. The T**rust Relationship** policy should have the account ID of the account where the security monkey instance is running.
 
 > **NOTE:** Additional `SecurityMonkeyInstanceProfile` roles are not required. You only need to create a new `SecurityMonkey` role.
-> **NOTE:** You will also need to add the new account in the Web UI, and restart the scheduler. 
+> **NOTE:** You will also need to add the new account in the Web UI, and restart the scheduler.
+
 
 ### Creating an EC2 Instance
 
@@ -225,6 +226,24 @@ You will be asked to create a key before launching the instance. This **key** wi
 You may now launch the new instance. Please take note of the **Public DNS** entry. We will need that later when configuring security monkey.
 
 
+### Keypair
+You may be prompted to download a keypair. You should protect this keypair; it is used to provide ssh access to the new instance. Put it in a safe place. You will need to change the permissions on the keypair to 600:
+
+```bash
+chmod 600 ~/Downloads/SecurityMonkeyKeypair.pem
+mv ~/Downloads/SecurityMonkeyKeypair.pem ~/.ssh
+```
+
+
+### Connecting to your new instance:
+
+We will connect to the new instance over ssh:
+
+```bash
+ssh -i ~/.ssh/SecurityMonkeyKeyPair.pem -l ubuntu <PUBLIC_IP_ADDRESS>
+```
+
+
 ### Installing Prerequisites
 
 Now we have a fresh install of Ubuntu as an EC2 instance. Let's add our hostname to our `/etc/hosts`
@@ -233,13 +252,15 @@ Now we have a fresh install of Ubuntu as an EC2 instance. Let's add our hostname
 sudo echo >> "127.0.0.1 $(hostname)" /etc/hosts
 ```
 
-Create and seeed our logging folders:
+Create and seed our logging folders:
 
 ```bash
 sudo mkdir /var/log/security_monkey
 sudo chown www-data /var/log/security_monkey
+
 sudo mkdir /var/www
 sudo chown www-data /var/www
+
 sudo touch /var/log/security_monkey/security_monkey.error.log
 sudo touch /var/log/security_monkey/security_monkey.access.log
 sudo touch /var/log/security_monkey/security_monkey-deploy.log
@@ -249,7 +270,7 @@ sudo chown www-data /var/log/security_monkey/security_monkey-deploy.log
 Let's install the tools we need for Security Monkey:
 
 ```bash
-sudo apt-get -y update
+sudo apt-get update
 sudo apt-get -y install python-pip python-dev python-psycopg2 postgresql postgresql-contrib libpq-dev nginx supervisor git swig python-m2crypto
 ```
 
@@ -257,20 +278,54 @@ sudo apt-get -y install python-pip python-dev python-psycopg2 postgresql postgre
 
 For production, you will want to use an AWS RDS Postgres database. For this guide, we will setup a database on the instance that was just launched.
 
-First, set a password for the postgres user. For this guide, we will use **securitymonkeypassword**:
+We will now create and configure the postrgres user and database. setting the password to  **securitymonkeypassword**:
 
 ```bash
-sudo -u postgres psql postgres
+# Configuring the Database
 
-# \password postgres
-Enter new password: securitymonkeypassword
-Enter it again: securitymonkeypassword
+sudo -u postgres psql
+
+  CREATE DATABASE 'secmonkey';
+  CREATE ROLE 'securitymonkeyuser' LOGIN PASSWORD 'securitymonkeypassword';
+  CREATE SCHEMA secmonkey;
+  GRANT Usage, Create ON SCHEMA 'secmonkey' TO 'securitymonkeyuser';
+  SET timezone TO 'GMT';
+  SELECT now();
+
+\q
 ```
 
-Type `CTRL-D` to exit PSQL once you have changed the password.
 
-Next, we will create our a new database:
+### Clone the Security Monkey Repo
+
+Next we'll clone and install the package:
 
 ```bash
-sudo -u postgres createdb secmonkey
+cd /usr/local/src
+sudo git clone --depth 1 --branch master https://github.com/Netflix/security_monkey.git
+
+cd security_monkey
+sudo python setup.py install
+```
+
+And then compile the web-app from the Dart code:
+
+```bash
+# Get the Google Linux package signing key.
+curl https://dl-ssl.google.com/linux/linux_signing_key.pub |sudo apt-key add -
+
+# Set up the location of the stable repository.
+cd ~
+curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > dart_stable.list
+sudo mv dart_stable.list /etc/apt/sources.list.d/dart_stable.list
+sudo apt-get update
+sudo apt-get install -y dart
+
+# Build the Web UI
+cd /usr/local/src/security_monkey/dart
+sudo /usr/lib/dart/bin/pub build
+
+# Copy the compiled Web UI to the appropriate destination
+sudo /bin/mkdir -p /usr/local/src/security_monkey/security_monkey/static/
+sudo /bin/cp -R /usr/local/src/security_monkey/dart/build/web/* /usr/local/src/security_monkey/security_monkey/static/
 ```
