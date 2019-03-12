@@ -1,10 +1,11 @@
-# SecOps with Netflix's Security Monkey
+# Automated Monitoring for Security Misconfigurations with Security Monkey
 
 ![Netlfix Ape Guy](assets/security_monkey.jpg)
 
 If you are working on cloud technologies and specifically cloud security, the first few questions you would get should be around security, data safety, cost effectiveness etc. Additionally, companies in the FinTech and Healthcare sectors may be concerned about how secure cloud technologies can be for them.
 
 Based on my considerable experience and battle scars, I would recommend looking at Security Monkey which was open sourced in 6/30/2014.
+
 
 ### So, What is Security Monkey?
 
@@ -21,7 +22,7 @@ Here are some common scenarios where Security Monkey can be of help, especially 
 ## The Multi-Account Services; A bulleted list
 
 
-### Security groups
+### Security Groups
 
 - Generates an Audit report of all the issues (IE, Security groups which are wide open to the internet or ingress from 0.0.0.0/0, etc.)
 - Creates an email alert when security group changes are done, which can come in handy when you have a PCI/SOX/HIPPA compliance related environment.
@@ -34,7 +35,7 @@ Here are some common scenarios where Security Monkey can be of help, especially 
 - Helps locate a security group which no longer exists in AWS or was deleted knowing or unknowingly.
 
 
-### Amazon S3
+### Simple Storage Service
 
 - Security Monkey acts as the source control for your S3 buckets policies, ACL, lifecycle rules.
 - Generates an audit report of all the current issues (IE, AWS S3 buckets which are accessible to everyone shared across unknown AWS accounts and have conditional statements)
@@ -59,3 +60,33 @@ Here is a good read on the [100s AWS S3 buckets left open exposing private data]
 - Finally Security Monkey also acts as a source control for all your IAM policies attached to the users/roles.
 
 A good read on the [AWS Console breach](http://arstechnica.com/security/2014/06/aws-console-breach-leads-to-demise-of-service-with-proven-backup-plan).
+
+
+### Elastic Loadbalancers
+
+- Alerts when an ELB is internet facing
+- Alerts when ELB logging is not enabled.
+- Alerts when deprecated ciphers are enabled on an ELB.
+- Provides a list of the weak ciphers if enabled on the ELB policy.
+
+
+### Simple Email Service
+
+- Monitors SES identities to make sure only valid company email address are configured as verified.
+- Monitors for all SES objects that are not verified and can be cleaned up.
+
+
+### Simple Queue Service
+
+- Alerts when an SQS queue has a policy granting access to everyone or open to world.
+- Notifies when there is change to the SQS policy.
+- Historical Information: Security Monkey is like the source control for SQS resource policies. To know the state of an SQS policy from a month ago, you can go back and perform a diff of the current state.
+
+
+### Compliance and Auditing
+
+Here are a few uses cases from PCI-DSS 3.2 and where security monkey comes handy:
+
+| PCI # | PCI-DSS 3.2 | Security Monkey |
+|-------|-------------|-----------------|
+| 10.2.7 | Creation and Deletion of System level objects | Logs and Alerts on changes to: <ul><li>IAM Users</li><li>Security Groups</li><li></li></ul>|
