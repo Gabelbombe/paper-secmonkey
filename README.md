@@ -89,4 +89,6 @@ Here are a few uses cases from PCI-DSS 3.2 and where security monkey comes handy
 
 | PCI # | PCI-DSS 3.2 | Security Monkey |
 |-------|-------------|-----------------|
-| 10.2.7 | Creation and Deletion of System level objects | Logs and Alerts on changes to: <ul><li>IAM Users</li><li>Security Groups</li><li></li></ul>|
+| 10.2.7 | Creation and Deletion of System level objects | Logs and Alerts on changes to: <ul><li>IAM Users</li><li>Security Groups</li><li>Elastic IP</li><li>Route 53</li></ul> |
+| 10.5.4 | Write logs for external-facing technologies onto a secure, centralized, internal log or service media device | Logs for external-facing echnologies <ul><li>Security Group Config</li><li>ELB Config</li><li>SES</li><li>IAM are queried and monitored by Security</li></ul> |
+  
