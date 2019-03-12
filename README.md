@@ -468,4 +468,4 @@ sudo service nginx restart
 
 Manually start Security Monkey with `monkey run_api_server`, and if God loves you, your should see this:
 
-![](assets.monkey_magic.png)
+![](assets/monkey_magic.png)
