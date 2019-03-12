@@ -284,14 +284,12 @@ We will now create and configure the postrgres user and database. setting the pa
 # Configuring the Database
 
 sudo -u postgres psql
-
-  CREATE DATABASE 'secmonkey';
-  CREATE ROLE 'securitymonkeyuser' LOGIN PASSWORD 'securitymonkeypassword';
-  CREATE SCHEMA secmonkey;
-  GRANT Usage, Create ON SCHEMA 'secmonkey' TO 'securitymonkeyuser';
-  SET timezone TO 'GMT';
-  SELECT now();
-
+CREATE DATABASE "secmonkey";
+CREATE ROLE "securitymonkeyuser" LOGIN PASSWORD 'securitymonkeypassword';
+CREATE SCHEMA secmonkey;
+GRANT Usage, Create ON SCHEMA "secmonkey" TO "securitymonkeyuser";
+set timezone TO 'GMT';
+SELECT now();
 \q
 ```
 
@@ -331,7 +329,7 @@ source venv/bin/activate
 
 ### Compile (or Download) the Web UI
 
-If you're using the stable (master) branch, you have the option of downloading the web UI instead of compiling it. Visit the [latest release](https://github.com/Netflix/security_monkey/releases/latest) and download static.tar.gz.
+If you're using the stable (master) branch, you have the option of downloading the Web UI instead of compiling it. Visit the [latest release](https://github.com/Netflix/security_monkey/releases/latest) and download static.tar.gz.
 
 If you're using the bleeding edge (develop) branch, you will need to compile the Web UI by following these instructions:
 
@@ -356,3 +354,33 @@ sudo mkdir -p /usr/local/src/security_monkey/static/
 sudo /bin/cp -R /usr/local/src/security_monkey/dart/build/web/* /usr/local/src/security_monkey/static/
 sudo chgrp -R www-data /usr/local/src/security_monkey
 ```
+
+
+### Create the database tables:
+Security Monkey uses Flask-Migrate (Alembic) to keep database tables up to date. To create the tables, run this command:
+
+```bash
+cd /usr/local/src/security_monkey/
+monkey db upgrade
+```
+
+
+### Add Amazon Accounts
+
+```bash
+monkey amazon_accounts
+```
+
+
+### S3 Canonical IDs
+If you are not using AWS, you can skip this section. If you are using AWS, you should run the command:
+
+```bash
+monkey fetch_aws_canonical_ids
+```
+
+AWS S3 has an ACL system that makes use of Canonical IDs. This is documented here. These IDs are not easy to find, but are very important for Security Monkey to know if an S3 bucket has unknown cross-account access. The above command is a convenience to automatically find those Canonical IDs and associate them with your account. It is highly recommended that you run this command after you add an AWS account.
+
+
+### Create the first user:
+Users can be created on the command line or by registering in the Web UI:
