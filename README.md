@@ -167,10 +167,16 @@ After that name the policy `SecurityMonkeyLaunchPerms`. Similar to this create a
 }
 ```
 
-Now we are ready with our policies and we can proceed to our role creation. Navigate to your IAM console again and select **Roles** from the left pane. Click on **Create Role** and on the next page select **EC2** as the service. In the next page add your previously created Policy `SecurityMonkeyLaunchPerms` to the role and on the last page, name your role `SecurityMonkeyInstaceProfile` and proceed with the role creation. Repeat the same steps to create another role and attach the Policy `SecurityMonkeyReadOnly` this time. Name this role `SecurityMonkey` and proceed with role creation.
+Now we are ready with our policies and we can proceed to our role creation. Navigate to your IAM console again and select **Roles** from the left pane. Click on **Create Role** and on the next page select **EC2** as the service.
 
 ![](assets/create_role.png)
+
+In the next page add your previously created Policy `SecurityMonkeyLaunchPerms` to the role.
+
 ![](assets/attach_perms.png)
+
+And on the last page, name your role `SecurityMonkeyInstaceProfile` and proceed with the role creation. Repeat the same steps to create another role and attach the Policy `SecurityMonkeyReadOnly` this time. Name this role `SecurityMonkey` and proceed with role creation.
+
 ![](assets/review.png)
 
 
