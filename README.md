@@ -494,4 +494,18 @@ Manually start Security Monkey with `monkey run_api_server`, and if God loves yo
 
 To initially get data into Security Monkey, you can run the `monkey find_changes` command. This will go through all your configured accounts in Security Monkey, fetch details about the accounts, store them into the database, and then audit the items for any issues.
 
-The find_changes command can be further scoped to account and technology with the `-a` account and `-m` technology parameters.
+The `find_changes` command can be further scoped to account and technology with the `-a` account and `-m` technology parameters.
+
+Here is the main screen showing issues found.
+
+![](assets/aws_security_monkey_1.png)
+
+This image shows a selected issue and the ability to justify it. Notice that multiple issues for a single resource are grouped here, allowing you to justify all or some of the issues for that resource.
+
+![](assets/aws_security_monkey_justified.png)
+
+This image shows the details for that resource to help you better understand what is being identified.
+
+![](assets/security_monkey_details)
+
+You can see the code for Security Monkey's checks [here](https://github.com/Netflix/security_monkey/tree/f96ba77de0cf7486562c9cb6e2702527fdaab518/security_monkey/auditors).
