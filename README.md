@@ -506,6 +506,6 @@ This image shows a selected issue and the ability to justify it. Notice that mul
 
 This image shows the details for that resource to help you better understand what is being identified.
 
-![](assets/security_monkey_details)
+![](assets/aws_security_monkey_details.png)
 
 You can see the code for Security Monkey's checks [here](https://github.com/Netflix/security_monkey/tree/f96ba77de0cf7486562c9cb6e2702527fdaab518/security_monkey/auditors).
